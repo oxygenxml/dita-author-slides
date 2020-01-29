@@ -8,9 +8,9 @@
         <xt:oxy_version>20.0+</xt:oxy_version>
         <xt:type>framework</xt:type>
         <xt:author>George Bina, Radu Coravu</xt:author>
-        <xt:name>Present sections inside a DITA topic as slides in Oxygen XML Editor.</xt:name>
+        <xt:name>DITA Slides Presentation.</xt:name>
         <xt:description xmlns="http://www.w3.org/1999/xhtml">
-            <h2>oXygen XML Editor framework which presents sections as slides.</h2>
+            <h2>oXygen XML Editor framework which presents DITA sections as slides.</h2>
             <p>A CSS layer which when enabled allows you to go through all sections inside a DITA topic in a sequential manner.
             Useful when presenting ideas directly from a DITA topic.</p>
         </xt:description>

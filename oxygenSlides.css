@@ -1,0 +1,177 @@
+/* Turn a DITA topic with embedded sections into a slide show. 
+ * We use a custom pseudo-class, :-oxy-hide, with the following semantics:
+ * :root:-oxy-hide means we are in presentation mode and then
+ *   all sections that should not be displayed have :-oxy-hide set on them
+ *   except the one that should be made visible
+ */
+
+@namespace oxy "http://www.oxygenxml.com/extensions/author";
+
+/* Enter presentation mode and show a specific section */
+:root:not(:-oxy-hide) > title:before{
+    display:inline;
+    vertical-align:top;
+    content: "\A0"
+    oxy_button(action, oxy_action(
+          name, 'Play slides', 
+          description, 'Play slides', 
+          icon, url('play.png'), 
+          operation, 'ro.sync.ecss.extensions.commons.operations.ChangePseudoClassesOperation', 
+          arg-setLocations, '//section | /topic',
+          arg-setPseudoClassNames, '-oxy-hide',
+          arg-removeLocations, '(//section)[1]',
+          arg-removePseudoClassNames, '-oxy-hide'
+        ), 
+        showIcon, true,
+        transparent, true)
+        "\A0"
+    ;
+}
+
+/* Add some space at the top to allow for the navigation buttons */
+:root:-oxy-hide {margin-top:2em;}
+
+/* We hide in presentation mode the body and the prolog of the main topic, 
+ * any section that has :-oxy-hide set and the :before and :after blocks of topics
+ * that are parents of a topic that is visible - we want the navigation actions
+ * only for the deepest visible topic
+ */
+:root:-oxy-hide > body > *:not(section),
+:root:-oxy-hide > prolog,
+:root:-oxy-hide section:-oxy-hide {
+    display:none;
+    color:red;
+}
+
+/* In presentation mode, move the main topic title to a fixed position */
+:root:-oxy-hide > title {
+    position:fixed;
+    left:0px;
+    top:0px;
+    text-align:right;
+    font-weight:normal;
+    font-size:0.8em;
+    background-color:#EFEFCF;
+    padding:0.4em;
+    margin:0px;
+    margin-right:1em;
+    width:150%;
+}
+:root:-oxy-hide > title:after {
+    content:"\A0";
+    width:33%;
+}
+
+/* Remove folds in presentation mode */
+:root:-oxy-hide section {
+  -oxy-foldable:false;    
+}
+
+/* Position the before and after blocks that will contain the navigation actions to a fixed location */
+:root:-oxy-hide section:before {
+    display:block;
+    position:fixed;
+    left:0.2em;
+    top:0;
+}
+:root:-oxy-hide section:after {
+    display:block;
+    position:fixed;
+    left:0;
+    bottom:0;
+    background-color:#EFEFCF;
+    width:150%;
+}
+
+
+/* slides navigation */
+:root:-oxy-hide section:before,
+:root:-oxy-hide section:after{
+    content:
+        oxy_button(action, oxy_action(
+          name, 'Previous slide', 
+          description, 'Move to the previous slide', 
+          icon, url('previous.gif'), 
+          operation, 'ro.sync.ecss.extensions.commons.operations.ChangePseudoClassesOperation', 
+          arg-setLocations, '//section',
+          arg-setPseudoClassNames, '-oxy-hide',
+          arg-removeLocations, 'if(preceding::section[1]) then preceding::section[1] else .',
+          arg-removePseudoClassNames, '-oxy-hide'
+        ), 
+        showIcon, true,
+        transparent, true)
+
+        oxy_button(action, oxy_action(
+          name, 'Next slide', 
+          description, 'Move to the next slide', 
+          icon, url('next.gif'), 
+          operation, 'ro.sync.ecss.extensions.commons.operations.ChangePseudoClassesOperation', 
+          arg-setLocations, '//section',
+          arg-setPseudoClassNames, '-oxy-hide',
+          arg-removeLocations, 'if(following::section[1]) then following::section[1] else .',
+          arg-removePseudoClassNames, '-oxy-hide'
+        ), 
+        showIcon, true,
+        transparent, true)
+        
+        oxy_button(action, oxy_action(
+          name, 'Stop slides show', 
+          description, 'Stop the slides show', 
+          icon, url('stop.gif'), 
+          operation, 'ro.sync.ecss.extensions.commons.operations.ChangePseudoClassesOperation', 
+          arg-setLocations, '.',
+          arg-setPseudoClassNames, '-oxy-hide',
+          arg-removeLocations, '//section | /topic',
+          arg-removePseudoClassNames, '-oxy-hide'
+        ), 
+        showIcon, true,
+        transparent, true)
+    ;
+}
+
+/* Show copyright information after the main topic, in a fixed position */
+:root:-oxy-hide:after {
+    display:block;
+    position:fixed;
+    right:0.1em;
+    bottom:0;
+    text-align:right;
+    font-weight:normal;
+    font-size:0.6em;
+    color:#777777;
+    background-color:#EFEFCF;
+    padding:0.5em;
+    width:50%;    
+    content:"Copyright @ " 
+      oxy_xpath('/topic/prolog[1]/copyright[1]/copyrholder[1]/text()') ", "
+      oxy_xpath('/topic/prolog[1]/copyright[1]/copyryear[1]/@year')
+    ;
+}
+
+/* WebApp specific*/
+@media oxygen and (platform:webapp) {
+    oxy|processing-instruction {
+        display:none !important;
+    }
+    :root:-oxy-hide:after {
+        bottom:45px!important; 
+    }
+    :root:-oxy-hide section:after {
+        bottom:45px!important;
+        content:"\A0"!important;
+    }
+    :root:-oxy-hide > title,
+    :root:-oxy-hide section:before {
+        top:42px!important;
+    }
+    :root:-oxy-hide > title {
+          width:100%!important;
+          padding-right:0.5em;
+    }
+    :root:-oxy-hide > title:after {
+          content:"\A0\A0";
+    }
+    :root:-oxy-hide {
+        padding-bottom:20em;
+    }
+}

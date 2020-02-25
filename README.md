@@ -12,7 +12,7 @@ This add-on is compatible with Oxygen XML Editor (or XML Author) version 20.0 or
 4. Select the **I accept all terms of the end user license agreement** option and click **Finish**.
 5. Restart the application.
 
-Result: If you open a DITA topic containing sections in the Author visual editing mode, the "Styles" drop down button will contain an extra CSS layer called ***Slides**, select that layer and a "".
+Result: If you open a DITA topic containing sections in the Author visual editing mode, the "Styles" drop down button will contain an extra CSS layer called ***Slides**, select that layer and press the "Play" button located near the topic title.
 
 Copyright and License
 ---------------------

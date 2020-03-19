@@ -16,6 +16,6 @@ Result: If you open a DITA topic containing sections in the Author visual editin
 
 Copyright and License
 ---------------------
-Copyright 2018 Syncro Soft SRL.
+Copyright 2020 Syncro Soft SRL.
 
 This project is licensed under [Apache License 2.0](https://github.com/oxygenxml/dita-author-slides/blob/master/LICENSE)
